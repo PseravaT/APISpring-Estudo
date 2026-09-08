@@ -1,0 +1,38 @@
+$kind: http-request
+name: http://localhost:8080/personagens
+description: ""
+url: http://localhost:8080/personagens
+method: POST
+headers:
+  sec-ch-ua-platform: '"Windows"'
+  X-KL-kfa-Ajax-Request: Ajax_Request
+  Referer: http://localhost:8080/swagger-ui/index.html
+  sec-ch-ua: '"Chromium";v="152", "Not?A_Brand";v="24", "Google Chrome";v="152"'
+  sec-ch-ua-mobile: ?0
+  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36
+  accept: "*/*"
+  DNT: "1"
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "nome": "Aragorn",
+      "raca": "Humano",
+      "classe": "Guerreiro",
+      "subclasse": "Mestre de Batalha",
+      "nivel": 5,
+      "hp": 45,
+      "classeArmadura": 16,
+      "forca": 16,
+      "destreza": 14,
+      "constituicao": 15,
+      "inteligencia": 10,
+      "sabedoria": 12,
+      "carisma": 8
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{json_web_token_0hc2}}"
+order: 1788902347487

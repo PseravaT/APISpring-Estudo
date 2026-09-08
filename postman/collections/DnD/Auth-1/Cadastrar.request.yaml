@@ -1,0 +1,16 @@
+$kind: http-request
+description: ""
+url: http://localhost:8080/usuarios
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"nome\": \"asd\",\r
+
+    \    \"email\": \"pedro@teste.com\",\r
+
+    \    \"senha\": \"1234566\"\r
+
+    }"
+order: 1788901421448
