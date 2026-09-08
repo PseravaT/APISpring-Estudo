@@ -3,6 +3,7 @@ package com.cesmac.dndmanager.service;
 import com.cesmac.dndmanager.dto.UsuarioRequestDTO;
 import com.cesmac.dndmanager.dto.UsuarioResponseDTO;
 import com.cesmac.dndmanager.entity.Usuario;
+import com.cesmac.dndmanager.exception.RegraNegocioException;
 import com.cesmac.dndmanager.mapper.UsuarioMapper;
 import com.cesmac.dndmanager.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class UsuarioService {
 
     public UsuarioResponseDTO criarUsuario(UsuarioRequestDTO request) {
         if (repository.existsByEmail(request.email())) {
-            throw new RuntimeException("Email já cadastrado na plataforma.");
+            throw new RegraNegocioException("Email já cadastrado na plataforma.");
         }
 
         Usuario usuario = mapper. toEntity(request);
