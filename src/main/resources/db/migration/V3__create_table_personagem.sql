@@ -1,0 +1,21 @@
+CREATE TABLE personagem (
+                            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                            usuario_id UUID NOT NULL,
+                            nome VARCHAR(100) NOT NULL,
+                            raca VARCHAR(50) NOT NULL,
+                            classe VARCHAR(50) NOT NULL,
+                            subclasse VARCHAR(50),
+                            nivel INTEGER NOT NULL CHECK (nivel >= 1 AND nivel <= 20),
+                            hp INTEGER NOT NULL,
+                            classe_armadura INTEGER NOT NULL,
+                            forca INTEGER NOT NULL,
+                            destreza INTEGER NOT NULL,
+                            constituicao INTEGER NOT NULL,
+                            inteligencia INTEGER NOT NULL,
+                            sabedoria INTEGER NOT NULL,
+                            carisma INTEGER NOT NULL,
+                            ativo BOOLEAN NOT NULL DEFAULT TRUE,
+                            criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            atualizado_em TIMESTAMP,
+                            CONSTRAINT fk_personagem_usuario FOREIGN KEY (usuario_id) REFERENCES usuario (id)
+);
