@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/personagens")
 @RequiredArgsConstructor
@@ -54,5 +56,9 @@ public class PersonagemController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
+    }
+    @GetMapping("/rolagens")
+    public ResponseEntity<List<Integer>> obterRolagens() {
+        return ResponseEntity.ok(service.rolarNovosAtributos());
     }
 }
