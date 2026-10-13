@@ -18,7 +18,9 @@ public class AuthService {
 
 
     public LoginResponseDTO autenticar(LoginRequestDTO request) {
-        Usuario usuario = repository.findByEmail(request.email())
+        String emailTratado = request.email() != null ? request.email().trim() : "";
+        Usuario usuario = repository.findByEmail(emailTratado)
+                .or(() -> repository.findByEmailIgnoreCase(emailTratado))
                 .orElseThrow(() -> new RuntimeException("Credenciais inválidas"));
 
         if (!passwordEncoder.matches(request.senha(), usuario.getSenha())) {

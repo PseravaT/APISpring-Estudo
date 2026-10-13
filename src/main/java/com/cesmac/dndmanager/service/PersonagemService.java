@@ -38,15 +38,33 @@ public class PersonagemService {
 
 
     public PersonagemResponseDTO criar(PersonagemRequestDTO request, String emailUsuarioLogado) {
+        if (emailUsuarioLogado == null || emailUsuarioLogado.isBlank()) {
+            throw new RegraNegocioException("Usuário não autenticado.");
+        }
 
-        Usuario dono = usuarioRepository.findByEmail(emailUsuarioLogado)
+        String emailTratado = emailUsuarioLogado.trim();
+        Usuario dono = usuarioRepository.findByEmail(emailTratado)
+                .or(() -> usuarioRepository.findByEmailIgnoreCase(emailTratado))
                 .orElseThrow(() -> new RegraNegocioException("Usuário não encontrado."));
-
 
         Personagem personagem = mapper.toEntity(request);
         personagem.setUsuario(dono);
 
         Personagem salvo = repository.save(personagem);
         return mapper.toResponse(salvo);
+    }
+
+    public List<PersonagemResponseDTO> listarPorUsuario(String emailUsuarioLogado) {
+        if (emailUsuarioLogado == null || emailUsuarioLogado.isBlank()) {
+            return List.of();
+        }
+        String emailTratado = emailUsuarioLogado.trim();
+        List<Personagem> lista = repository.findAllByUsuarioEmail(emailTratado);
+        if (lista.isEmpty()) {
+            lista = repository.findAllByUsuarioEmailIgnoreCase(emailTratado);
+        }
+        return lista.stream()
+                .map(mapper::toResponse)
+                .toList();
     }
 }

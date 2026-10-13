@@ -50,15 +50,38 @@ public class PersonagemController {
             Authentication authentication
     ) {
 
-        PersonagemResponseDTO response =
-                service.criar(request, authentication.getName());
+        String email = extrairEmail(authentication);
+        PersonagemResponseDTO response = service.criar(request, email);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
     }
+
+    @GetMapping
+    @Operation(
+            summary = "Listar personagens",
+            description = "Retorna todas as fichas de personagens do usuário autenticado."
+    )
+    public ResponseEntity<List<PersonagemResponseDTO>> listar(Authentication authentication) {
+        String email = extrairEmail(authentication);
+        return ResponseEntity.ok(service.listarPorUsuario(email));
+    }
+
     @GetMapping("/rolagens")
     public ResponseEntity<List<Integer>> obterRolagens() {
         return ResponseEntity.ok(service.rolarNovosAtributos());
+    }
+
+    private String extrairEmail(Authentication authentication) {
+        if (authentication == null) return null;
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof com.cesmac.dndmanager.entity.Usuario u) {
+            return u.getEmail();
+        }
+        if (principal instanceof org.springframework.security.core.userdetails.UserDetails userDetails) {
+            return userDetails.getUsername();
+        }
+        return authentication.getName();
     }
 }
