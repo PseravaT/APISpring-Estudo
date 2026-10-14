@@ -6,18 +6,21 @@ import com.cesmac.dndmanager.entity.Usuario;
 import com.cesmac.dndmanager.exception.RegraNegocioException;
 import com.cesmac.dndmanager.mapper.UsuarioMapper;
 import com.cesmac.dndmanager.repository.UsuarioRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class UsuarioService {
 
     private final UsuarioRepository repository;
     private final UsuarioMapper mapper;
     private final PasswordEncoder passwordEncoder;
 
+    public UsuarioService(UsuarioRepository repository, UsuarioMapper mapper, PasswordEncoder passwordEncoder) {
+        this.repository = repository;
+        this.mapper = mapper;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public UsuarioResponseDTO criarUsuario(UsuarioRequestDTO request) {
         String emailTratado = request.email() != null ? request.email().trim().toLowerCase() : "";
