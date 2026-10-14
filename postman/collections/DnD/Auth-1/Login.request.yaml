@@ -1,0 +1,82 @@
+$kind: http-request
+description: ""
+url: http://localhost:8080/auth/login
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"email\": \"pedro@teste.com\",\r
+
+    \  \"senha\": \"1234566\"\r
+
+    }"
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      // ── Testes ──────────────────────────────────────────────────────────────
+
+      pm.test("Status 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Resposta é JSON", function () {
+          pm.response.to.be.json;
+      });
+
+      pm.test("Corpo contém o campo 'token'", function () {
+          const json = pm.response.json();
+          pm.expect(json).to.have.property("token");
+      });
+
+      pm.test("Token é uma string não vazia", function () {
+          const json = pm.response.json();
+          pm.expect(json.token).to.be.a("string").and.not.empty;
+      });
+
+      pm.test("Token tem formato JWT (3 partes separadas por '.')", function () {
+          const json = pm.response.json();
+          const parts = json.token.split(".");
+          pm.expect(parts).to.have.lengthOf(3);
+      });
+
+      pm.test("Tempo de resposta abaixo de 2000ms", function () {
+          pm.expect(pm.response.responseTime).to.be.below(2000);
+      });
+
+      // ── Salva variáveis de ambiente ──────────────────────────────────────────
+
+      const response = pm.response.json();
+      const token = response.token;
+
+      if (token) {
+          pm.environment.set("token", token);
+
+          try {
+              const base64Url = token.split('.')[1];
+              const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+              const payload = JSON.parse(atob(base64));
+
+              pm.environment.set("usuarioEmail", payload.sub);
+              pm.environment.set("tokenExp", payload.exp);
+
+              pm.test("Payload JWT contém 'sub' (email)", function () {
+                  pm.expect(payload.sub).to.be.a("string").and.not.empty;
+              });
+
+              pm.test("Payload JWT contém 'exp' (expiração)", function () {
+                  pm.expect(payload.exp).to.be.a("number");
+              });
+
+              pm.test("Token ainda não expirou", function () {
+                  const agora = Math.floor(Date.now() / 1000);
+                  pm.expect(payload.exp).to.be.above(agora);
+              });
+
+              console.log("Token e email salvos com sucesso:", payload.sub);
+          } catch (e) {
+              console.error("Falha ao decodificar JWT:", e);
+          }
+      }
+order: 3395342777937161

@@ -1,0 +1,8 @@
+name: local
+values:
+  - key: token
+    value: ''
+  - key: usuarioEmail
+    value: ''
+  - key: tokenExp
+    value: ''

@@ -20,11 +20,13 @@ public class UsuarioService {
 
 
     public UsuarioResponseDTO criarUsuario(UsuarioRequestDTO request) {
-        if (repository.existsByEmail(request.email())) {
+        String emailTratado = request.email() != null ? request.email().trim().toLowerCase() : "";
+        if (repository.existsByEmail(emailTratado) || repository.existsByEmailIgnoreCase(emailTratado)) {
             throw new RegraNegocioException("Email já cadastrado na plataforma.");
         }
 
-        Usuario usuario = mapper. toEntity(request);
+        Usuario usuario = mapper.toEntity(request);
+        usuario.setEmail(emailTratado);
         usuario.setSenha(passwordEncoder.encode(request.senha()));
 
         Usuario usuarioSalvo = repository.save(usuario);

@@ -1,0 +1,17 @@
+$kind: collection
+variables:
+  - key: token
+    value: ""
+    disabled: false
+  - key: json_web_token_0hc2
+    secret: true
+    disabled: false
+auth:
+  - id: a09e2b9d-dfc8-4634-9b26-ca8e573e372a
+    type: bearer
+    name: Bearer Token
+    credentials:
+      token: "{{token}}"
+  - id: 9641c49a-49c0-474d-8bd8-4abb1cb81e5f
+    type: basic
+    name: Basic Auth
