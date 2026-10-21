@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apidados-deployment
+  labels:
+    app: apidados
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: apidados
+  template:
+    metadata:
+      labels:
+        app: apidados
+    spec:
+      containers:
+        - name: apidados
+          image: apidados:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081
+              name: http
+          resources:
+            requests:
+              cpu: "150m"
+              memory: "128Mi"
+            limits:
+              cpu: "300m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/rolagens/atributos
+              port: 8081
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /api/rolagens/atributos
+              port: 8081
+            initialDelaySeconds: 20
+            periodSeconds: 10
