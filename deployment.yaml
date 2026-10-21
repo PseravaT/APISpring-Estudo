@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dndmanager-deployment
+  labels:
+    app: dndmanager
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: dndmanager
+  template:
+    metadata:
+      labels:
+        app: dndmanager
+    spec:
+      containers:
+        - name: dndmanager
+          image: dndmanager:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: dndmanager-secret
+                  key: db-url
+                  optional: true
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: dndmanager-secret
+                  key: db-username
+                  optional: true
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dndmanager-secret
+                  key: db-password
+                  optional: true
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: dndmanager-secret
+                  key: jwt-secret
+                  optional: true
+            - name: JWT_EXPIRATION
+              value: "86400000"
+            - name: APIDADO_URL
+              value: "http://apidados-service:8081"
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 45
+            periodSeconds: 15
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10

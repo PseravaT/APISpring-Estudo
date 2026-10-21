@@ -1,0 +1,15 @@
+target
+.mvn/wrapper/maven-wrapper.jar.asc
+.git
+.gitignore
+.gitattributes
+.idea
+.vscode
+*.iml
+.env
+.env.*
+HELP.md
+postman
+.postman
+Dockerfile
+.dockerignore
