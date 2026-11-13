@@ -23,3 +23,6 @@ api:
       expiration: ${JWT_EXPIRATION}
   dados:
     url: ${APIDADO_URL}
+
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000}

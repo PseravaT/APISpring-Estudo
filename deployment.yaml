@@ -49,7 +49,7 @@ spec:
                   key: jwt-secret
                   optional: true
             - name: JWT_EXPIRATION
-              value: "86400000"
+              value: "24"
             - name: APIDADO_URL
               value: "http://apidados-service:8081"
           resources:

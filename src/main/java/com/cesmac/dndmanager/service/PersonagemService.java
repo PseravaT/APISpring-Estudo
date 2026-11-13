@@ -23,7 +23,7 @@ public class PersonagemService {
     private final PersonagemMapper mapper;
     private final RestTemplate restTemplate;
 
-    @Value("${APIDADO_URL}")
+    @Value("${APIDADO_URL:${api.dados.url:http://localhost:8081/api/rolagens/atributos}}")
     private String apiDadosUrl;
 
     public PersonagemService(PersonagemRepository repository,
